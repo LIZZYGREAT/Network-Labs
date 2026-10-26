@@ -1,0 +1,29 @@
+server listening on 0.0.0.0:45513 (Ctrl+C to stop)
+accepted connection from 127.0.0.1:45666
+accepted connection from 127.0.0.1:45680
+user connected: Alice
+accepted connection from 127.0.0.1:45682
+user connected: Bob
+accepted connection from 127.0.0.1:45696
+user connected: Charlie
+accepted connection from 127.0.0.1:45700
+accepted connection from 127.0.0.1:45706
+user disconnected: Bob
+accepted connection from 127.0.0.1:45722
+user connected: Bob
+accepted connection from 127.0.0.1:45730
+user connected: InvalidUtf8
+user disconnected: InvalidUtf8
+accepted connection from 127.0.0.1:45740
+accepted connection from 127.0.0.1:45742
+rejected frame with invalid body length
+accepted connection from 127.0.0.1:45748
+accepted connection from 127.0.0.1:45764
+accepted connection from 127.0.0.1:45768
+user connected: CliSmoke
+user disconnected: CliSmoke
+stopping server...
+user disconnected: Bob
+user disconnected: Alice
+user disconnected: Charlie
+server stopped
