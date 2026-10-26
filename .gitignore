@@ -1,0 +1,19 @@
+# C++ build outputs
+/server
+/client
+/build/
+*.o
+*.d
+core
+core.*
+
+# Python test artifacts
+__pycache__/
+*.py[cod]
+
+# Editor and operating-system clutter
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
