@@ -1,11 +1,11 @@
 # 测试输入与观察结果
 
-- 对应测试时间：2026-10-20 18:29:41 CST +0800
-- 对应测试地址：127.0.0.1:45513
+- 对应测试时间：2026-10-28 17:02:17 CST +0800
+- 对应测试地址：127.0.0.1:8888
 
 | 编号 | 输入 / 操作 | 实际观察 |
 | --- | --- | --- |
-| T00 | 启动服务端并连接 127.0.0.1:45513。 | 本机 TCP connect 成功，服务端保持运行并接受后续客户端。 |
+| T00 | 启动服务端并连接 127.0.0.1:8888。 | 本机 TCP connect 成功，服务端保持运行并接受后续客户端。 |
 | T01 | Alice 的 LOGIN 分 3 次写入；Bob、Charlie 正常登录。 | 三人均收到空 Data 的 LOGIN_OK。 |
 | T02 | Alice 在线时再次 LOGIN(Alice)；另发空用户名 LOGIN。 | 分别收到 ERROR: username already in use 和 ERROR: invalid username。 |
 | T03 | Alice 一次 sendall 写入“你好，Hello!”与“第二条消息 / second message”两帧。 | Alice、Bob、Charlie 各按顺序收到两条，核对 6/6 条正文、用户名和时间字段。 |
