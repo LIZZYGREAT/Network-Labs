@@ -5,3 +5,4 @@
 ## 实验分支
 
 - `lab1`：基于 TCP Socket 的多人聊天室。切换到该分支后，查看对应 README 获取编译、运行和验收方法。
+- `lab2`：基于 Npcap 的以太网数据帧捕获。查看 [`lab2/README.md`](lab2/README.md) 获取构建、运行和验收方法。

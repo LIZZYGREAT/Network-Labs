@@ -2,6 +2,7 @@
 /server
 /client
 /build/
+/lab2/build/
 *.o
 *.d
 core
