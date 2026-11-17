@@ -10,23 +10,24 @@
 
 ## 构建
 
-从 `workspace/` 运行：
+在 WSL Bash 中进入 `workspace/` 后运行：
 
 ```bash
-make -C lab2
-file lab2/build/npcap_capture.exe
+cd ~/projects/network-lab/workspace
+make
+file build/lab2/npcap_capture.exe
 ```
 
 如果 SDK 不在默认路径，可显式指定：
 
 ```bash
-make -C lab2 SDK_DIR=/path/to/npcap-sdk-1.17
+make SDK_DIR=/path/to/npcap-sdk-1.17
 ```
 
 清理生成物：
 
 ```bash
-make -C lab2 clean
+make clean
 ```
 
 ## 在 WSL Bash 中运行 Windows 程序
@@ -34,7 +35,7 @@ make -C lab2 clean
 以下命令假设当前目录是 `workspace/`，并通过 PowerShell 调用 Windows Npcap：
 
 ```bash
-EXE_WIN="$(wslpath -w "$PWD/lab2/build/npcap_capture.exe")"
+EXE_WIN="$(wslpath -w "$PWD/build/lab2/npcap_capture.exe")"
 powershell.exe -NoProfile -Command \
   "\$env:Path = 'C:\Windows\System32\Npcap;' + \$env:Path; & '$EXE_WIN' --list; Write-Output ('ExitCode=' + \$LASTEXITCODE)"
 ```
@@ -85,7 +86,7 @@ powershell.exe -NoProfile -Command \
 在 `workspace/` 运行：
 
 ```bash
-make -C lab2 test
+make test
 ```
 
 用例检查已知的 15 字节帧，以及 0、14、15 字节长度边界和空指针输入。该测试只验证解析器，不代表 Windows Npcap 实时捕获已通过。
@@ -107,9 +108,9 @@ make -C lab2 test
 
 | 项目 | 命令/证据 | 结果 |
 | --- | --- | --- |
-| Windows x64 交叉编译 | `make -C lab2 clean && make -C lab2` | 退出码 0 |
-| 可执行文件格式 | `file lab2/build/npcap_capture.exe` | `PE32+ executable (console) x86-64, for MS Windows` |
-| 解析器固定字节与边界检查 | `make -C lab2 test` | 退出码 0，输出 `Ethernet parser checks passed.` |
+| Windows x64 交叉编译 | 2026-11-17 执行 `make` | 退出码 0 |
+| 可执行文件格式 | `file build/lab2/npcap_capture.exe` | `PE32+ executable (console) x86-64, for MS Windows` |
+| 解析器固定字节与边界检查 | 2026-11-03 在目录调整前执行 `make -C lab2 test` | 退出码 0，输出 `Ethernet parser checks passed.` |
 | Windows Npcap 枚举和实时捕获 | 通过 `powershell.exe` 调用程序 | 尚未验证：WSL 在启动 Windows 进程前返回 `UtilBindVsockAnyPort:309: socket failed 1`，程序未运行 |
 | Wireshark 对照与实验截图 | 需观察 Windows 实际抓包 | 尚未完成，不能把示例帧当作运行证据 |
 

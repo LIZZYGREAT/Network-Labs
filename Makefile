@@ -1,7 +1,8 @@
 CXX = x86_64-w64-mingw32-g++
 HOST_CXX ?= g++
-SDK_DIR ?= $(abspath $(CURDIR)/../../tools/npcap-sdk-1.17)
-BUILD_DIR ?= build
+MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+SDK_DIR ?= $(abspath $(MAKEFILE_DIR)/../tools/npcap-sdk-1.17)
+BUILD_DIR ?= build/lab2
 TARGET := $(BUILD_DIR)/npcap_capture.exe
 PARSER_TEST := $(BUILD_DIR)/ethernet_test
 SOURCES := src/main.cpp src/device.cpp src/capture.cpp src/ethernet.cpp
@@ -31,4 +32,4 @@ test: $(PARSER_TEST)
 	./$(PARSER_TEST)
 
 clean:
-	rm -rf $(BUILD_DIR)
+	rm -f $(OBJECTS) $(TARGET) $(PARSER_TEST)
