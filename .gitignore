@@ -2,7 +2,7 @@
 /server
 /client
 /build/
-/lab2/build/
+docs/private
 *.o
 *.d
 core
