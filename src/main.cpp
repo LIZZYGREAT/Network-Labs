@@ -12,6 +12,7 @@
 namespace {
 
 struct DeviceListDeleter {
+    // 作为 unique_ptr 的自定义删除器，确保所有退出路径都会释放 Npcap 设备链表。
     void operator()(pcap_if_t* devices) const {
         if (devices != nullptr) {
             pcap_freealldevs(devices);
@@ -26,6 +27,7 @@ struct Options {
     std::optional<std::size_t> count;
 };
 
+// 打印支持的命令行参数，供帮助信息和参数错误时复用。
 void printUsage(const char* program) {
     std::cout << "Usage: " << program
               << " [--list] [--device-index N] [--count N]\n"
@@ -34,6 +36,7 @@ void printUsage(const char* program) {
               << "  --count N          Stop after displaying N valid frames\n";
 }
 
+// 将十进制字符串严格转换为正整数；拒绝空值、零、尾随字符和溢出。
 bool parsePositiveSize(std::string_view value, std::size_t& result) {
     if (value.empty()) {
         return false;
@@ -50,6 +53,7 @@ bool parsePositiveSize(std::string_view value, std::size_t& result) {
     return true;
 }
 
+// 逐项读取命令行参数并写入 Options；遇到缺值、非法值或冲突组合时返回失败。
 bool parseOptions(int argc, char** argv, Options& options) {
     for (int i = 1; i < argc; ++i) {
         const std::string_view argument(argv[i]);
@@ -89,6 +93,7 @@ bool parseOptions(int argc, char** argv, Options& options) {
     return true;
 }
 
+// 在交互模式读取设备编号，并反复校验输入直到选择有效设备或用户退出。
 bool readDeviceIndex(std::size_t deviceCount, std::size_t& selectedIndex) {
     std::string input;
     while (true) {
@@ -109,6 +114,7 @@ bool readDeviceIndex(std::size_t deviceCount, std::size_t& selectedIndex) {
 
 }  // namespace
 
+// 程序入口：解析参数、枚举设备、确定本次运行中的设备编号并启动捕获。
 int main(int argc, char** argv) {
     Options options;
     if (!parseOptions(argc, argv, options)) {

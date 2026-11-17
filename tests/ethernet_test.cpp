@@ -7,6 +7,7 @@
 
 namespace {
 
+// 检查单项条件；失败时输出对应说明并返回 false，便于汇总测试结果。
 bool expect(bool condition, const char* message) {
     if (!condition) {
         std::cerr << "FAIL: " << message << "\n";
@@ -17,6 +18,7 @@ bool expect(bool condition, const char* message) {
 
 }  // namespace
 
+// 用已知帧字节验证字段偏移、网络字节序、MAC 格式和短帧边界。
 int main() {
     const std::array<std::uint8_t, 15> frame = {
         0x00, 0x11, 0x22, 0x33, 0x44, 0x55,  // Destination MAC

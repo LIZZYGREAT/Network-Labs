@@ -12,6 +12,7 @@
 namespace {
 
 struct PcapCloser {
+    // 释放捕获句柄，让 unique_ptr 在正常结束和错误返回时统一关闭设备。
     void operator()(pcap_t* handle) const {
         if (handle != nullptr) {
             pcap_close(handle);
@@ -19,6 +20,7 @@ struct PcapCloser {
     }
 };
 
+// 将 Npcap 提供的秒和微秒时间戳转换为本地时分秒及毫秒文本。
 std::string formatTimestamp(const timeval& timestamp) {
     const std::time_t seconds = static_cast<std::time_t>(timestamp.tv_sec);
     const std::tm* local = std::localtime(&seconds);
@@ -33,6 +35,7 @@ std::string formatTimestamp(const timeval& timestamp) {
     return output.str();
 }
 
+// 输出一条已解析帧的编号、时间、四项实验字段和捕获长度。
 void printFrame(std::size_t frameNumber, const pcap_pkthdr& header,
                 const EthernetFields& fields) {
     std::cout << '#' << frameNumber << "  " << formatTimestamp(header.ts)
@@ -48,6 +51,9 @@ void printFrame(std::size_t frameNumber, const pcap_pkthdr& header,
 
 }  // namespace
 
+// 用 pcap_open_live 打开设备，再通过 pcap_datalink 确保收到的是 Ethernet 帧。
+// 捕获循环把超时视为继续等待、错误视为失败、数据源结束视为正常退出；短于 15 字节的帧跳过。
+// count 为空时持续捕获；有值时，累计显示到指定数量后正常退出，RAII 负责关闭句柄。
 int captureDevice(const pcap_if_t* device, std::optional<std::size_t> count) {
     if (device == nullptr || device->name == nullptr) {
         std::cerr << "Invalid capture device.\n";

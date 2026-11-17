@@ -3,6 +3,9 @@
 #include <iomanip>
 #include <sstream>
 
+// 按 Ethernet II 固定偏移提取目的 MAC(0-5)、源 MAC(6-11)、Type/Length(12-13) 和偏移 14 字节。
+// Type/Length 按网络字节序组合为 16 位值。
+// 先验证指针和捕获长度，任何校验失败都返回原因且不读取帧内容。
 bool parseEthernetFrame(const std::uint8_t* bytes, std::size_t capturedLength,
                         EthernetFields& fields, std::string& error) {
     constexpr std::size_t kRequiredLength = 15;
@@ -27,6 +30,7 @@ bool parseEthernetFrame(const std::uint8_t* bytes, std::size_t capturedLength,
     return true;
 }
 
+// 将 6 字节 MAC 地址格式化为大写、冒号分隔的十六进制字符串。
 std::string formatMacAddress(const std::array<std::uint8_t, 6>& address) {
     std::ostringstream output;
     output << std::uppercase << std::hex << std::setfill('0');

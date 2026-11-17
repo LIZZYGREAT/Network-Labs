@@ -13,8 +13,7 @@ struct EthernetFields {
     std::uint8_t firstByteAfterType = 0;
 };
 
-// Parses the fixed offsets required by the experiment. Returns false when the
-// captured buffer is null or shorter than 15 bytes.
+// 按实验要求的固定偏移解析帧字段；数据为空或捕获长度不足 15 字节时返回 false。
 bool parseEthernetFrame(const std::uint8_t* bytes, std::size_t capturedLength,
                         EthernetFields& fields, std::string& error);
 

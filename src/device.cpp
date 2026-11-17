@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+// 调用 Npcap 枚举设备；失败时复制错误文本并清理可能已分配的链表。
 bool enumerateDevices(pcap_if_t*& devices, std::string& error) {
     char errorBuffer[PCAP_ERRBUF_SIZE]{};
     devices = nullptr;
@@ -17,6 +18,7 @@ bool enumerateDevices(pcap_if_t*& devices, std::string& error) {
     return true;
 }
 
+// 遍历 Npcap 设备链表并返回设备数量，用于校验用户选择的编号范围。
 std::size_t countDevices(const pcap_if_t* devices) {
     std::size_t count = 0;
     for (const pcap_if_t* device = devices; device != nullptr; device = device->next) {
@@ -25,6 +27,7 @@ std::size_t countDevices(const pcap_if_t* devices) {
     return count;
 }
 
+// 按本次枚举顺序显示设备编号、描述和传给 pcap_open_live 的内部名称。
 void printDevices(const pcap_if_t* devices) {
     if (devices == nullptr) {
         std::cout << "No capture devices were found.\n";
@@ -44,6 +47,7 @@ void printDevices(const pcap_if_t* devices) {
     }
 }
 
+// 使用从 1 开始的编号定位设备；编号为 0 或超出链表时返回空指针。
 const pcap_if_t* deviceAt(const pcap_if_t* devices, std::size_t oneBasedIndex) {
     if (oneBasedIndex == 0) {
         return nullptr;
