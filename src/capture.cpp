@@ -62,12 +62,14 @@ int captureDevice(const pcap_if_t* device, std::optional<std::size_t> count) {
 
     char errorBuffer[PCAP_ERRBUF_SIZE]{};
     std::unique_ptr<pcap_t, PcapCloser> capture(
-        pcap_open_live(device->name, 65535, 0, 1000, errorBuffer));
+        pcap_open_live(device->name, 65535, 0, 1000, errorBuffer));   //选择网卡打开设备
+        //设备名称，保留字节snaplen,promisc,to_ms超时上限,错误信息
     if (!capture) {
         std::cerr << "Could not open capture device: " << errorBuffer << "\n";
         return 1;
     }
 
+    //检验数据格式是否符合定义的P[0]-P[14]
     const int dataLinkType = pcap_datalink(capture.get());
     if (dataLinkType != DLT_EN10MB) {
         std::cerr << "Unsupported data-link type " << dataLinkType
@@ -91,7 +93,8 @@ int captureDevice(const pcap_if_t* device, std::optional<std::size_t> count) {
     while (!count.has_value() || displayedFrames < *count) {
         pcap_pkthdr* header = nullptr;
         const u_char* packet = nullptr;
-        const int result = pcap_next_ex(capture.get(), &header, &packet);
+        const int result = pcap_next_ex(capture.get(), &header, &packet);  //反复向Npcap进行询问是否有下一份捕获数据
+        //未捕获的情况如下：
         if (result == 0) {
             continue;  // Read timeout, not an error.
         }
@@ -117,11 +120,11 @@ int captureDevice(const pcap_if_t* device, std::optional<std::size_t> count) {
                       << header->caplen << " bytes): " << parseError << "\n";
             continue;
         }
-
+        //成功捕获，进行print
         ++displayedFrames;
         printFrame(displayedFrames, *header, fields);
     }
-
+    //结果输出，完成情况如何。
     std::cout << "Capture finished: " << displayedFrames << " displayed frame(s), "
               << skippedShortFrames << " short frame(s) skipped.\n";
     return 0;

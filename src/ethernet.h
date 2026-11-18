@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <string>
 
+//定义要求的数据结构 6目的Mac+6源Mac+2Type+首字节
 struct EthernetFields {
     std::array<std::uint8_t, 6> destinationMac{};
     std::array<std::uint8_t, 6> sourceMac{};

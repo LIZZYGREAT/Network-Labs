@@ -165,5 +165,5 @@ int main(int argc, char** argv) {
 
     // The device list remains alive until captureDevice has opened and finished
     // using the selected entry, then its owning unique_ptr releases it.
-    return captureDevice(selectedDevice, options.count);
+    return captureDevice(selectedDevice, options.count);  //执行具体逻辑
 }
